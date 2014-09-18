@@ -98,7 +98,13 @@ public class FiniteSet {
         }
 
         public boolean member(int elt) {
-            return (data == elt || left.member(elt) || right.member(elt));
+            if (data == elt) {
+                return true;
+            } else if (data > elt) {
+                return left.member(elt);
+            } else {
+                return right.member(elt);
+            }
         }
 
         public BST add(int elt) {
@@ -137,7 +143,7 @@ public class FiniteSet {
             if (tree.member(data)) {
                 return left.union(right).diff(tree.remove(data));
             } else {
-                return new Tree(data, left.diff(tree), right.diff(tree));
+                return left.union(right).diff(tree);
             }
         }
 
@@ -157,24 +163,21 @@ public class FiniteSet {
         return randy.nextInt((max - min) + 1) + min;
     }
 
-// Helper function so the input for a randomBST is just the length.
-// Resolves temp not being initialized if length = 0 from previous build.
-    public static BST randomBSTHelp(BST temp, int length) {
+    public static BST randomBSTHelper(BST temp, int length) {
         if (length == 0) {
             return temp;
         } else {
             int randyInt = randomInt(0, 100);
             if (!(temp.member(randyInt))) {
-                temp.add(randyInt);
-                return randomBSTHelp(temp, length - 1);
+                return randomBSTHelper(temp.add(randyInt), length - 1);
             } else {
-                return randomBSTHelp(temp, length);
+                return randomBSTHelper(temp, length);
             }
         }
     }
 
     public static BST randomBST(int length) {
-        return randomBSTHelp(new Empty(), length);
+        return randomBSTHelper(new Empty(), length);
     }
 
     public static void main(String[] args) {
@@ -207,6 +210,7 @@ public class FiniteSet {
         System.out.println(t_5.member(5) + " should be " + true);
         System.out.println(t_5.member(6) + " should be " + false);
         System.out.println(t_6.member(5) + " should be " + true);
+        System.out.println(t_6.member(7) + " should be " + true);
         System.out.println(t_6.member(6) + " should be " + true);
         System.out.println(t_6.member(9) + " should be " + false);
         System.out.println("");
@@ -261,20 +265,19 @@ public class FiniteSet {
         System.out.println(t_6.inter(t_8).cardinality() + " should be " + 0);
         System.out.println("");
 
-//To right of each test is my crude representation of what I expect, as (data, left, right). Following is the cardinality I'm getting.
         System.out.println("diff Tests:");
-        System.out.println(MT.diff(MT).cardinality() + " should be " + 0); //mt 0
-        System.out.println(MT.diff(t_5).cardinality() + " should be " + 1); //(5, mt, mt) 1
-        System.out.println(t_5.diff(t_5).cardinality() + " should be " + 0); //mt 0
-        System.out.println(t_5.diff(t_6).cardinality() + " should be " + 2); //(6, mt, 7) 2
-        System.out.println(t_5.diff(t_4).cardinality() + " should be " + 1); //(4, mt, mt) 3
-        System.out.println(MT.diff(t_6).cardinality() + " should be " + 3); //(6, 5, 7) 3
-        System.out.println(t_6.diff(MT).cardinality() + " should be " + 0); //mt 3
-        System.out.println(t_6.diff(t_5).cardinality() + " should be " + 0); //mt 4
-        System.out.println(t_6.diff(t_7).cardinality() + " should be " + 0); //mt 4
-        System.out.println(t_6.diff(t_6).cardinality() + " should be " + 0); //mt 0
-        System.out.println(t_6.diff(t_4).cardinality() + " should be " + 3); //(6, 5, 7) 7
-        System.out.println(t_6.diff(t_8).cardinality() + " should be " + 3); //(6, 5, 7) 7
+        System.out.println(MT.diff(MT).cardinality() + " should be " + 0);
+        System.out.println(MT.diff(t_5).cardinality() + " should be " + 1);
+        System.out.println(t_5.diff(t_5).cardinality() + " should be " + 0);
+        System.out.println(t_5.diff(t_6).cardinality() + " should be " + 2);
+        System.out.println(t_5.diff(t_4).cardinality() + " should be " + 1);
+        System.out.println(MT.diff(t_6).cardinality() + " should be " + 3);
+        System.out.println(t_6.diff(MT).cardinality() + " should be " + 0);
+        System.out.println(t_6.diff(t_5).cardinality() + " should be " + 0);
+        System.out.println(t_6.diff(t_7).cardinality() + " should be " + 0);
+        System.out.println(t_6.diff(t_6).cardinality() + " should be " + 0);
+        System.out.println(t_6.diff(t_4).cardinality() + " should be " + 1);
+        System.out.println(t_6.diff(t_8).cardinality() + " should be " + 1);
         System.out.println("");
 
         System.out.println("equal Tests:");
@@ -306,10 +309,24 @@ public class FiniteSet {
         int length4 = randomInt(0, 40);
         int length5 = randomInt(0, 50);
 
+        System.out.println(length1);
+        System.out.println(length2);
+        System.out.println(length3);
+        System.out.println(length4);
+        System.out.println(length5);
+        System.out.println("");
+
         BST randa = randomBST(length1);
         BST rande = randomBST(length2);
         BST randi = randomBST(length3);
         BST rando = randomBST(length4);
         BST randu = randomBST(length5);
+
+        System.out.println(randa.cardinality());
+        System.out.println(rande.cardinality());
+        System.out.println(randi.cardinality());
+        System.out.println(rando.cardinality());
+        System.out.println(randu.cardinality());
+        System.out.println("");
     }
 }
