@@ -133,11 +133,9 @@ public class FiniteSet {
             }
         }
 
-// diff should return what is in this and not in tree? currently returns
-// what is in this and not in tree as well as what is in tree and not in this
         public BST diff(BST tree) {
             if (tree.member(data)) {
-                return left.diff(tree).union(right.diff(tree));
+                return left.union(right).diff(tree.remove(data));
             } else {
                 return new Tree(data, left.diff(tree), right.diff(tree));
             }
@@ -160,7 +158,7 @@ public class FiniteSet {
     }
 
 // Helper function so the input for a randomBST is just the length.
-// Resolves temp not being initialized if length = 0 from last build.
+// Resolves temp not being initialized if length = 0 from previous build.
     public static BST randomBSTHelp(BST temp, int length) {
         if (length == 0) {
             return temp;
@@ -263,18 +261,20 @@ public class FiniteSet {
         System.out.println(t_6.inter(t_8).cardinality() + " should be " + 0);
         System.out.println("");
 
+//To right of each test is my crude representation of what I expect, as (data, left, right). Following is the cardinality I'm getting.
         System.out.println("diff Tests:");
-        System.out.println(MT.diff(MT).cardinality() + " should be " + 0);
-        System.out.println(MT.diff(t_5).cardinality() + " should be " + 1);
-        System.out.println(t_5.diff(MT).cardinality() + " should be " + 0);
-        System.out.println(t_5.diff(t_4).cardinality() + " should be " + 1);
-        System.out.println(t_5.diff(t_5).cardinality() + " should be " + 0);
-        System.out.println(t_5.diff(t_6).cardinality() + " should be " + 2);
-        System.out.println(t_6.diff(t_4).cardinality() + " should be " + 1);
-        System.out.println(t_6.diff(t_5).cardinality() + " should be " + 1);
-        System.out.println(t_6.diff(t_6).cardinality() + " should be " + 0);
-        System.out.println(t_6.diff(t_7).cardinality() + " should be " + 1);
-        System.out.println(t_6.diff(t_8).cardinality() + " should be " + 1);
+        System.out.println(MT.diff(MT).cardinality() + " should be " + 0); //mt 0
+        System.out.println(MT.diff(t_5).cardinality() + " should be " + 1); //(5, mt, mt) 1
+        System.out.println(t_5.diff(t_5).cardinality() + " should be " + 0); //mt 0
+        System.out.println(t_5.diff(t_6).cardinality() + " should be " + 2); //(6, mt, 7) 2
+        System.out.println(t_5.diff(t_4).cardinality() + " should be " + 1); //(4, mt, mt) 3
+        System.out.println(MT.diff(t_6).cardinality() + " should be " + 3); //(6, 5, 7) 3
+        System.out.println(t_6.diff(MT).cardinality() + " should be " + 0); //mt 3
+        System.out.println(t_6.diff(t_5).cardinality() + " should be " + 0); //mt 4
+        System.out.println(t_6.diff(t_7).cardinality() + " should be " + 0); //mt 4
+        System.out.println(t_6.diff(t_6).cardinality() + " should be " + 0); //mt 0
+        System.out.println(t_6.diff(t_4).cardinality() + " should be " + 3); //(6, 5, 7) 7
+        System.out.println(t_6.diff(t_8).cardinality() + " should be " + 3); //(6, 5, 7) 7
         System.out.println("");
 
         System.out.println("equal Tests:");
