@@ -159,19 +159,24 @@ public class FiniteSet {
         return randy.nextInt((max - min) + 1) + min;
     }
 
-    public static BST randomBST(int length) {
-        BST temp;                            // temp not initialized, could make helper function?
+// Helper function so the input for a randomBST is just the length.
+// Resolves temp not being initialized if length = 0 from last build.
+    public static BST randomBSTHelp(BST temp, int length) {
         if (length == 0) {
             return temp;
         } else {
             int randyInt = randomInt(0, 100);
             if (!(temp.member(randyInt))) {
                 temp.add(randyInt);
-                return randomBST(length - 1);
+                return randomBSTHelp(temp, length - 1);
             } else {
-                return randomBST(length);
+                return randomBSTHelp(temp, length);
             }
         }
+    }
+
+    public static BST randomBST(int length) {
+        return randomBSTHelp(new Empty(), length);
     }
 
     public static void main(String[] args) {
