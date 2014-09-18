@@ -51,14 +51,14 @@ public class FiniteSet {
         
         public BST diff( BST tree){
             return tree;
-        }
+        }       
         
         public boolean equal( BST tree){
             return tree.isEmptyHuh();
         }
         
         public boolean subset( BST tree){
-            return tree.isEmptyHuh();
+            return true;
         }
     }
     
@@ -131,8 +131,6 @@ public class FiniteSet {
                 return new Tree(data, left.diff(tree), right.diff(tree));
             }
         }
-
-// this one is also not working        
         
         public boolean equal( BST tree){
             return (this.subset(tree) && tree.subset(this));
@@ -142,10 +140,33 @@ public class FiniteSet {
             return (tree.member(data) && left.subset(tree) && right.subset(tree));
         }
     }
+    
+// Random BST stuff
+        
+        static Random randy = new Random();
+        public static int randomInt(int min, int max) {
+            return randy.nextInt((max-min)+1)+min;
+        }
+        
+        public static BST randomBST(int length){
+            BST temp;
+            if (length == 0) {
+                return temp;
+            } else {
+                int randyInt = randomInt(0, 100);
+                if (!(temp.member(randyInt))){
+                    temp.add(randyInt);
+                    return randomBST(length-1);
+                } else{
+                    return randomBST(length);
+                }
+            }
+        }
             
     public static void main(String[] args) {
         
 // CHECK BST PROPERTY IS HELD THROUGHOUT
+        //I think it is?
         
         System.out.println("Gonna do some testing below:");
         System.out.println("");
@@ -153,13 +174,12 @@ public class FiniteSet {
 // Very basic testing, checking that things seem to be okay. NOT EXHAUSTIVE. No fun properties, yet.
 
         BST MT = new Empty();
-        BST t_4 = new Tree( 4, MT, MT);
-        BST t_5 = new Tree( 5, MT, MT);
-        BST t_7 = new Tree( 7, MT, MT);
-        BST t_8 = new Tree( 8, MT, MT);
+        BST t_4 = new Tree( 4, MT, MT );
+        BST t_5 = new Tree( 5, MT, MT );
+        BST t_7 = new Tree( 7, MT, MT );
+        BST t_8 = new Tree( 8, MT, MT );
         BST t_6 = new Tree( 6, t_5, t_7);
        
-        
         System.out.println("Cardinality Tests:");
         System.out.println(MT.cardinality() + " should be " + 0);
         System.out.println(t_5.cardinality() + " should be " + 1);
@@ -206,6 +226,12 @@ public class FiniteSet {
         System.out.println(t_5.union(t_4).cardinality() + " should be " + 2);
         System.out.println(t_5.union(t_7).cardinality() + " should be " + 2);
         System.out.println(t_5.union(t_8).cardinality() + " should be " + 2);
+        System.out.println(t_5.union(t_7).union(t_8).cardinality() + " should be " + 3);
+        System.out.println(t_5.union(t_8).union(t_7).cardinality() + " should be " + 3);
+        System.out.println(t_7.union(t_8).union(t_5).cardinality() + " should be " + 3);
+        System.out.println(t_7.union(t_5).union(t_8).cardinality() + " should be " + 3);
+        System.out.println(t_8.union(t_7).union(t_5).cardinality() + " should be " + 3);
+        System.out.println(t_8.union(t_5).union(t_7).cardinality() + " should be " + 3);
         System.out.println(t_6.union(t_4).cardinality() + " should be " + 4);
         System.out.println(t_6.union(t_8).cardinality() + " should be " + 4);
         System.out.println(t_6.union(t_8).union(t_4).cardinality() + " should be " + 5);
@@ -225,9 +251,7 @@ public class FiniteSet {
         System.out.println(t_6.inter(t_8).cardinality() + " should be " + 0);
         System.out.println("");
 
-// From here on is not working well. 
-        //Due to specs of diff. Need to change. Meh.
-        //Also subset is no bueno so equal is also no bueno since it uses subset.
+//Due to specs of diff, these don't work. Need to change function? Or incorrectly spec'd?
         
         System.out.println("diff Tests:");
         System.out.println(MT.diff(MT).cardinality() + " should be " + 0);
@@ -262,5 +286,21 @@ public class FiniteSet {
         System.out.println(t_6.subset(t_7) + " should be " + true);
         System.out.println(t_6.subset(t_5) + " should be " + true);
         System.out.println("");
+        
+// Just Random BST Things
+        
+        int randyInt = randomInt(0,100);
+        
+        int length1 = randomInt(0,100);
+        int length2 = randomInt(0,100);
+        int length3 = randomInt(0,100);
+        int length4 = randomInt(0,100);
+        int length5 = randomInt(0,100);
+        
+        BST randa = randomBST(length1);
+        BST rande = randomBST(length2);
+        BST randi = randomBST(length3);
+        BST rando = randomBST(length4);
+        BST randu = randomBST(length5);
     }
 }
